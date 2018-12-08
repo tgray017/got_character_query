@@ -1,6 +1,2 @@
-require "got_character_query/version"
-
-module GotCharacterQuery
-  class Error < StandardError; end
-  # Your code goes here...
-end
+require_relative './got_character_query/version'
+require_relative './got_character_query/cli'

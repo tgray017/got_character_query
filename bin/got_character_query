@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require './lib/got_character_query'
+
+GotCharacterQuery::CLI.new.call
