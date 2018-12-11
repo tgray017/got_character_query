@@ -25,10 +25,20 @@ class Character
     end
   end
   
+  def scrape_character_properties(url)
+    html = Nokogiri::HTML(open(url))
+    info_box = html.css('.infobox').xpath('//tr[th[@scope="row"]]/descendant-or-self::node()').text
+    #info_box.each {|thing| puts thing.text}
+    binding.pry
+  end
+  
   
   def initialize(name, link_to_bio = "N/A", overview)
     @name = name
     @link_to_bio = link_to_bio
+    unless link_to_bio == "N/A"
+      scrape_character_properties(link_to_bio)
+    end
     @overview = overview
     @@all << self
   end
@@ -52,5 +62,4 @@ class Character
 end
 
 Character.scrape_for_characters
-binding.pry
-Character.all
+# binding.pry
