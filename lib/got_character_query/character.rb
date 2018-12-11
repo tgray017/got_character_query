@@ -6,12 +6,9 @@ class Character
   
   def initialize
     html = Nokogiri::HTML(open('https://en.wikipedia.org/wiki/List_of_Game_of_Thrones_characters'))
-    adjusted_html = html.xpath('//h2[2]/following-sibling::h3') & html.xpath('//h2[3]/preceding-sibling::h3')
-    adjusted_html2 = html.xpath('//h2/following-sibling::node()/following-sibling::node()')
-    #adjusted_html2.each {|thing| puts thing.text}
-    #adjusted_html = html.xpath('//h2/following-sibling::h2') & html.xpath('//h2[last]')
-    #adjusted_html = html.xpath('//span[@id="Main_characters"]') & html.xpath('//span[@id="Main_characters"]/following-sibling::h2')
-    #& html.xpath('//span[@id="Supporting_characters"]')
+    adjusted_html3 = html.xpath('//h2[span[@id="Main_characters"]]/following-sibling::node()[following-sibling::h2[span[@id="Supporting_characters"]]]')
+    
+    #adjusted_html3.each {|thing| puts thing.text}
     binding.pry
   end
   

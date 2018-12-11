@@ -1,0 +1,21 @@
+
+[1mFrom:[0m /home/redolent-teacher-2456/Development/got_character_query/lib/got_character_query/character.rb @ line 22 Character#initialize:
+
+     [1;34m7[0m: [32mdef[0m [1;34minitialize[0m
+     [1;34m8[0m:   html = [1;34;4mNokogiri[0m::HTML(open([31m[1;31m'[0m[31mhttps://en.wikipedia.org/wiki/List_of_Game_of_Thrones_characters[1;31m'[0m[31m[0m))
+     [1;34m9[0m:   [1;34m#adjusted_html = html.xpath('//h2[2]/following-sibling::h3') & html.xpath('//h2[3]/preceding-sibling::h3')[0m
+    [1;34m10[0m:   [1;34m#adjusted_html2 = html.xpath('//h2/following-sibling::node()/following-sibling::node()')[0m
+    [1;34m11[0m: 
+    [1;34m12[0m:   adjusted_html3 = html.xpath([31m[1;31m'[0m[31m//h2[span[@id="Main_characters"]]/following-sibling::node()[following-sibling::h2[span[@id="Supporting_characters"]]][1;31m'[0m[31m[0m)
+    [1;34m13[0m:   
+    [1;34m14[0m:   [1;34m#adjusted_html4 = html.xpath('//h2[span[@id="Main_characters"]]/following-sibling::node()/following-sibling::node()/h2[span[@id="Supporting_characters"]]')[0m
+    [1;34m15[0m:   
+    [1;34m16[0m:   [1;34m#html.xpath('//h2[span[@id="Main_characters"]]')[0m
+    [1;34m17[0m:   
+    [1;34m18[0m:   [1;34m#adjusted_html3.each {|thing| puts thing.text}[0m
+    [1;34m19[0m:   [1;34m#adjusted_html = html.xpath('//h2/following-sibling::h2') & html.xpath('//h2[last]')[0m
+    [1;34m20[0m:   [1;34m#adjusted_html = html.xpath('//span[@id="Main_characters"]') & html.xpath('//span[@id="Main_characters"]/following-sibling::h2')[0m
+    [1;34m21[0m:   [1;34m#& html.xpath('//span[@id="Supporting_characters"]')[0m
+ => [1;34m22[0m:   binding.pry
+    [1;34m23[0m: [32mend[0m
+
