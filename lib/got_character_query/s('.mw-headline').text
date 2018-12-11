@@ -1,0 +1,53 @@
+=> [1;34m#(Element:0x11b8d88 {[0m
+  name = [31m[1;31m"[0m[31mh3[1;31m"[0m[31m[0m,
+  children = [
+    [1;34m#(Element:0x10d18ac {[0m
+      name = [31m[1;31m"[0m[31mspan[1;31m"[0m[31m[0m,
+      attributes = [
+        [1;34m#(Attr:0x10d1190 {[0m name = [31m[1;31m"[0m[31mid[1;31m"[0m[31m[0m, value = [31m[1;31m"[0m[31mEddard_.22Ned.22_Stark[1;31m"[0m[31m[0m })]
+      }),
+    [1;34m#(Element:0x1102ed4 {[0m
+      name = [31m[1;31m"[0m[31mspan[1;31m"[0m[31m[0m,
+      attributes = [
+        [1;34m#(Attr:0x11022a4 {[0m name = [31m[1;31m"[0m[31mclass[1;31m"[0m[31m[0m, value = [31m[1;31m"[0m[31mmw-headline[1;31m"[0m[31m[0m }),
+        [1;34m#(Attr:0x1102290 {[0m name = [31m[1;31m"[0m[31mid[1;31m"[0m[31m[0m, value = [31m[1;31m"[0m[31mEddard_[1;35m\"[0m[31mNed[1;35m\"[0m[31m_Stark[1;31m"[0m[31m[0m })],
+      children = [ [1;34m#(Text [0m[31m[1;31m"[0m[31mEddard [1;35m\"[0m[31mNed[1;35m\"[0m[31m Stark[1;31m"[0m[31m[0m)]
+      }),
+    [1;34m#(Element:0x110a2ec {[0m
+      name = [31m[1;31m"[0m[31mspan[1;31m"[0m[31m[0m,
+      attributes = [
+        [1;34m#(Attr:0x110d9ec {[0m name = [31m[1;31m"[0m[31mclass[1;31m"[0m[31m[0m, value = [31m[1;31m"[0m[31mmw-editsection[1;31m"[0m[31m[0m })],
+      children = [
+        [1;34m#(Element:0x110e6f8 {[0m
+          name = [31m[1;31m"[0m[31mspan[1;31m"[0m[31m[0m,
+          attributes = [
+            [1;34m#(Attr:0x110e004 {[0m
+              name = [31m[1;31m"[0m[31mclass[1;31m"[0m[31m[0m,
+              value = [31m[1;31m"[0m[31mmw-editsection-bracket[1;31m"[0m[31m[0m
+              })],
+          children = [ [1;34m#(Text [0m[31m[1;31m"[0m[31m[[1;31m"[0m[31m[0m)]
+          }),
+        [1;34m#(Element:0x113981c {[0m
+          name = [31m[1;31m"[0m[31ma[1;31m"[0m[31m[0m,
+          attributes = [
+            [1;34m#(Attr:0x1138e6c {[0m
+              name = [31m[1;31m"[0m[31mhref[1;31m"[0m[31m[0m,
+              value = [31m[1;31m"[0m[31m/w/index.php?title=List_of_Game_of_Thrones_characters&action=edit&section=5[1;31m"[0m[31m[0m
+              }),
+            [1;34m#(Attr:0x1138e58 {[0m
+              name = [31m[1;31m"[0m[31mtitle[1;31m"[0m[31m[0m,
+              value = [31m[1;31m"[0m[31mEdit section: Eddard [1;35m\"[0m[31mNed[1;35m\"[0m[31m Stark[1;31m"[0m[31m[0m
+              })],
+          children = [ [1;34m#(Text [0m[31m[1;31m"[0m[31medit[1;31m"[0m[31m[0m)]
+          }),
+        [1;34m#(Element:0x113f014 {[0m
+          name = [31m[1;31m"[0m[31mspan[1;31m"[0m[31m[0m,
+          attributes = [
+            [1;34m#(Attr:0x113e664 {[0m
+              name = [31m[1;31m"[0m[31mclass[1;31m"[0m[31m[0m,
+              value = [31m[1;31m"[0m[31mmw-editsection-bracket[1;31m"[0m[31m[0m
+              })],
+          children = [ [1;34m#(Text [0m[31m[1;31m"[0m[31m][1;31m"[0m[31m[0m)]
+          })]
+      })]
+  })
