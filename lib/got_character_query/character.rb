@@ -3,7 +3,7 @@ require 'pry'
 require 'nokogiri'
 
 class Character
-  attr_reader :name, :link_to_bio, :overview
+  attr_reader :name, :link_to_bio, :overview, :properties
   
   @@all = []
   
@@ -26,19 +26,42 @@ class Character
   end
   
   def scrape_character_properties(url)
-    html = Nokogiri::HTML(open(url))
-    info_box = html.css('.infobox').xpath('//tr[th[@scope="row"]]/descendant-or-self::node()').text
+    info_box = Nokogiri::HTML(open(url)).css('.infobox tbody tr')
+    properties = {}
+    
+    info_box.each_with_index do |element, index|
+      unless element.css('th[scope="row"]').empty?
+        property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
+        values = info_box[index].css('td').text
+        
+        #values.each_with_index do |v, i|
+          #might want a method to turn each value into its own hash if there are multiple values associated with the key
+        #end
+        
+        properties[property] = values
+        
+        binding.pry
+      end
+      
+    
+      
+      
+    end
+    #the following can grab the property keys:
+    #info_box = Nokogiri::HTML(open(url)).css('.infobox tbody tr th[scope="row"]')
+    
     #info_box.each {|thing| puts thing.text}
-    binding.pry
   end
   
   
   def initialize(name, link_to_bio = "N/A", overview)
     @name = name
     @link_to_bio = link_to_bio
+    
     unless link_to_bio == "N/A"
       scrape_character_properties(link_to_bio)
     end
+    
     @overview = overview
     @@all << self
   end
