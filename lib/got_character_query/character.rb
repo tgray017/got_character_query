@@ -32,7 +32,39 @@ class Character
     info_box.each_with_index do |element, index|
       unless element.css('th[scope="row"]').empty?
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
-        values = info_box[index].css('td').text
+        values = []
+        
+        info_box[index].css('td').xpath('.//descendant-or-self::li').each do |value|
+          if value.text.split('').last == ':'
+            subproperties = {}
+            subproperty = value.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
+            subvalues = []
+            
+            unless value.xpath('.//following-sibling::li').text.split('').last == ':'
+              value.xpath('.//following-sibling::li').each do |subvalue|
+                subvalues << subvalue.text
+              end
+            end
+            
+            subproperties[subproperty] = subvalues
+            
+          else
+            
+            
+            binding.pry
+            
+          end
+          
+          
+          
+          values << value.text
+          binding.pry
+        end
+        
+        #info_box[index].css('td').each do |value|
+        #  values << value.text
+        #  binding.pry
+        #end
         
         #values.each_with_index do |v, i|
           #might want a method to turn each value into its own hash if there are multiple values associated with the key
@@ -40,7 +72,7 @@ class Character
         
         properties[property] = values
         
-        binding.pry
+        #binding.pry
       end
       
     
