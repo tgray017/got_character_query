@@ -40,14 +40,22 @@ class Character
             subproperty = value.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
             subvalues = []
             
-            unless value.xpath('.//following-sibling::li').text.split('').last == ':'
-              value.xpath('.//following-sibling::li').each do |subvalue|
-                subvalues << subvalue.text
-              end
+            list_nodes = value.xpath('.//following-sibling::li')
+            
+            
+            #unless value.xpath('.//following-sibling::li').text.split('').last == ':'
+             
+              list_nodes.each do |subvalue|
+                unless subvalue.text.split('').last == ':'
+                  subvalues << subvalue.text
+  
+                end
+                
+            #  end
             end
             
             subproperties[subproperty] = subvalues
-            
+            binding.pry
           else
             
             
