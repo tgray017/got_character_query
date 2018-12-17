@@ -34,7 +34,8 @@ class Character
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
         values = []
         info_box[index].css('td').xpath('.//descendant-or-self::li').each {|value| values << value.text}
-        properties[property] = values
+        property_array = []
+        #properties[property] = values
         
         values.each_with_index do |value, index|
           if value.split('').last == ':'
@@ -48,9 +49,10 @@ class Character
               counter += 1
             end
             subproperties[subproperty] = subvalues
+            property_array << subproperties
           end
+          properties[property] = property_array
           binding.pry
-
         end
       end
     end

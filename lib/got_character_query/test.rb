@@ -11,6 +11,9 @@ values =
 "Video game:",
 "The Lost Lords (2015)"]
 
+properties = {}
+property = :first_appearance
+property_array = []
 
 values.each_with_index do |value, index|
   if value.split('').last == ':'
@@ -24,6 +27,9 @@ values.each_with_index do |value, index|
       counter += 1
     end
     subproperties[subproperty] = subvalues
+    property_array << subproperties
   end
+  properties[property] = property_array
   binding.pry
+
 end
