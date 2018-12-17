@@ -33,41 +33,76 @@ class Character
       unless element.css('th[scope="row"]').empty?
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
         values = []
+        info_box[index].css('td').xpath('.//descendant-or-self::li').each {|value| values << value.text}
+        properties[property] = values
         
-        info_box[index].css('td').xpath('.//descendant-or-self::li').each do |value|
-          if value.text.split('').last == ':'
-            subproperties = {}
-            subproperty = value.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
-            subvalues = []
-            
-            list_nodes = value.xpath('.//following-sibling::li')
-            
-            
-            #unless value.xpath('.//following-sibling::li').text.split('').last == ':'
-             
-              list_nodes.each do |subvalue|
-                unless subvalue.text.split('').last == ':'
-                  subvalues << subvalue.text
-  
-                end
-                
-            #  end
-            end
-            
-            subproperties[subproperty] = subvalues
-            binding.pry
-          else
-            
-            
-            binding.pry
+        values.each_with_index do |value, i|
+          if value.split('').last == ':'
             
           end
-          
-          
-          
-          values << value.text
-          binding.pry
         end
+        binding.pry
+      end
+    end
+    
+
+     
+    binding.pry   
+  end
+
+      
+#        if value.text.split('').last
+#          subproperties = {}
+#          subproperty = value.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
+#          subvalues = []
+#          
+#          list_nodes = value.xpath('.//following-sibling::li')
+#          
+#          
+#        
+#        
+#        binding.pry
+#        if value.text.split('').last == ':'
+#          subproperties = {}
+#          subproperty = value.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
+#          subvalues = []
+#          
+#          list_nodes = value.xpath('.//following-sibling::li')
+#          
+#          second_subproperties = {}
+#          second_subvalues = []             
+#           
+#            list_nodes.each do |subvalue|
+#              if subvalue.text.split('').last == ':'
+#                second_subproperty = subvalue.text.downcase.gsub(/\s+/, "_").gsub(':','').to_sym
+#                second_list_nodes = subvalue.xpath('.//following-sibling::li')
+#                second_list_nodes.each do |second_subvalue|
+#                  second_subvalues << second_subvalue.text
+#                end
+#                
+#                second_subproperties[second_subproperty] = second_subvalues
+#              else
+#                subvalues << subvalue.text#
+
+#              end
+#              
+#          #  end
+#            end
+#          
+#          subproperties[subproperty] = subvalues
+#          binding.pry
+#        else
+#          
+#          
+#          binding.pry
+#          
+#        end
+          
+          
+          
+
+          #binding.pry
+
         
         #info_box[index].css('td').each do |value|
         #  values << value.text
@@ -78,20 +113,11 @@ class Character
           #might want a method to turn each value into its own hash if there are multiple values associated with the key
         #end
         
-        properties[property] = values
+
         
         #binding.pry
-      end
       
-    
-      
-      
-    end
-    #the following can grab the property keys:
-    #info_box = Nokogiri::HTML(open(url)).css('.infobox tbody tr th[scope="row"]')
-    
-    #info_box.each {|thing| puts thing.text}
-  end
+  
   
   
   def initialize(name, link_to_bio = "N/A", overview)
