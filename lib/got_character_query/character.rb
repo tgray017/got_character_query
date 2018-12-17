@@ -36,18 +36,24 @@ class Character
         info_box[index].css('td').xpath('.//descendant-or-self::li').each {|value| values << value.text}
         properties[property] = values
         
-        values.each_with_index do |value, i|
+        values.each_with_index do |value, index|
           if value.split('').last == ':'
+            subproperties = {}
+            subproperty = value.delete(':').downcase.gsub(/\s+/, "_").to_sym
+            subvalues = []
             
+            enumerator = [1..values.size].to_enum
+            while values[index + enumerator.to_i].split('').last != ':'
+              subvalues << values[index + enumerator.to_i]
+              enumerator.next
+            end
+            subproperties[subproperty] = subvalues
           end
+          binding.pry
+
         end
-        binding.pry
       end
     end
-    
-
-     
-    binding.pry   
   end
 
       
