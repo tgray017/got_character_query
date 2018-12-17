@@ -42,10 +42,10 @@ class Character
             subproperty = value.delete(':').downcase.gsub(/\s+/, "_").to_sym
             subvalues = []
             
-            enumerator = [1..values.size].to_enum
-            while values[index + enumerator.to_i].split('').last != ':'
-              subvalues << values[index + enumerator.to_i]
-              enumerator.next
+            counter = 1
+            while counter + index < values.size && values[index + counter].split('').last != ':'
+              subvalues << values[index + counter]
+              counter += 1
             end
             subproperties[subproperty] = subvalues
           end
