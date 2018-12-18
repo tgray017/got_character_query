@@ -33,9 +33,13 @@ class Character
       unless element.css('th[scope="row"]').empty?
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
         values = []
-        info_box[index].css('td').xpath('.//descendant-or-self::li').each {|value| values << value.text}
+        info_box[index].css('td').xpath('.//descendant-or-self::li|a|td').each {|value| values << value.text}
+          #changing from li to node() triples the values for some reason. Need to find a way for td's to be included for td's that are themselves the value. Not sure why the -or-self isn't accomplishing this
+          #looks like it's not even assigning the property because it sees it as empty
+        #binding.pry
         property_array = []
         #properties[property] = values
+        #binding.pry
         
         values.each_with_index do |value, index|
           if value.split('').last == ':'
@@ -51,7 +55,9 @@ class Character
             subproperties[subproperty] = subvalues
             property_array << subproperties
             properties[property] = property_array
-          elsif properties.values.last.instance_of?(Array) && !properties.values.last.collect {|hash| hash.values}.flatten.include?(value)
+          elsif properties.values.last.instance_of?(Array) && properties.values.last.any? {|e| e.is_a?(Hash)} && properties.values.last.collect {|hash| hash.values}.flatten.include?(value)
+            # If the previous entry in the properties hash is an array of hashes and one of the hashes includes a value equal to the current value, do nothing so that the subproperty values aren't included as values in the level above
+          else
             if values.size > 1
               value_array = []
               values.each {|value| value_array << value}
@@ -59,7 +65,7 @@ class Character
             else
               properties[property] = value
             end
-          
+          #elsif properties.values.last.instance_of?(Array) || properties.values.last.instance_of?(String)
           #elsif properties.values.last.instance_of?(String)
           #  properties[property] = value
           end
