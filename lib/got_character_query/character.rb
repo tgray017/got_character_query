@@ -50,8 +50,20 @@ class Character
             end
             subproperties[subproperty] = subvalues
             property_array << subproperties
+            properties[property] = property_array
+          elsif properties.values.last.instance_of?(Array) && !properties.values.last.collect {|hash| hash.values}.flatten.include?(value)
+            if values.size > 1
+              value_array = []
+              values.each {|value| value_array << value}
+              properties[property] = value_array
+            else
+              properties[property] = value
+            end
+          
+          #elsif properties.values.last.instance_of?(String)
+          #  properties[property] = value
           end
-          properties[property] = property_array
+          
           binding.pry
         end
       end
