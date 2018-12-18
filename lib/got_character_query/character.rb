@@ -30,10 +30,11 @@ class Character
     properties = {}
     
     info_box.each_with_index do |element, index|
+      #binding.pry
       unless element.css('th[scope="row"]').empty?
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
         values = []
-        info_box[index].css('td').xpath('.//descendant-or-self::li|a|td').each {|value| values << value.text}
+        info_box[index].css('td').xpath('..//descendant-or-self::li|a | ..//descendant-or-self::td[not(*)]').each {|value| values << value.text}
           #changing from li to node() triples the values for some reason. Need to find a way for td's to be included for td's that are themselves the value. Not sure why the -or-self isn't accomplishing this
           #looks like it's not even assigning the property because it sees it as empty
         #binding.pry
