@@ -32,7 +32,7 @@ class Character
     info_box.each_with_index do |element, index|
       #binding.pry
       unless element.css('th[scope="row"]').empty?
-        property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").to_sym
+        property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
         values = []
         info_box[index].css('td').xpath('..//descendant-or-self::li|a | ..//descendant-or-self::td[not(*)]').each {|value| values << value.text}
           #changing from li to node() triples the values for some reason. Need to find a way for td's to be included for td's that are themselves the value. Not sure why the -or-self isn't accomplishing this
@@ -45,11 +45,12 @@ class Character
         values.each_with_index do |value, index|
           if value.split('').last == ':'
             subproperties = {}
-            subproperty = value.delete(':').downcase.gsub(/\s+/, "_").to_sym
+            subproperty = value.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
             subvalues = []
             
             counter = 1
             while counter + index < values.size && values[index + counter].split('').last != ':'
+              # need another while loop here to make sure the novels: situation doesn't happen
               subvalues << values[index + counter]
               counter += 1
             end
