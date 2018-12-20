@@ -50,7 +50,6 @@ class Character
             
             counter = 1
             while counter + index < values.size && values[index + counter].split('').last != ':'
-              # need another while loop here to make sure the novels: situation doesn't happen
               subvalues << values[index + counter]
               counter += 1
             end
@@ -59,6 +58,8 @@ class Character
             properties[property] = property_array
           elsif properties.values.last.instance_of?(Array) && properties.values.last.any? {|e| e.is_a?(Hash)} && properties.values.last.collect {|hash| hash.values}.flatten.include?(value)
             # If the previous entry in the properties hash is an array of hashes and one of the hashes includes a value equal to the current value, do nothing so that the subproperty values aren't included as values in the level above
+          elsif values.any? {|v| v.split("").last == ":"}
+            # do something to mimick the above, but for subproperties that occur towards the bottom (like novels:)
           else
             if values.size > 1
               value_array = []
