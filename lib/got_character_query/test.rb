@@ -64,19 +64,18 @@ if values.any? {|value| value.split("").last == ":"}
       when index_array.size >1 && index_array.include?(0)
         subproperties = {}
         subvalues = []
-        index_array.each do |index|
-          subproperty = values[index].delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
-          #binding.pry
-          if !index_array[index+1] == index_array.last
-            while index + c < values.size && index + c < index_array[index+1]
-              subvalues << values[index + c]
-              c += 1
-            end
-          else
-            while index + c < values.size
-              subvalues << values[index + c]
-              c += 1
-            end
+        
+        #if the current value's index is included in the index array...
+        if index_array.include?(i)
+          c2 = 1
+          
+          #then the subproperty is the current value as a symbol...
+          subproperty = v.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
+          
+          #and while the next value's index is less than the next index in the index_array
+          while (!index_array[i + 1].nil? && i + c2 < index_array[i + 1]) || (i == index_array.last && i + c2 < values.size)
+            subvalues << values[i + c2]
+            c2 += 1
           end
           subproperties[subproperty] = subvalues
           property_array << subproperties
@@ -86,10 +85,10 @@ if values.any? {|value| value.split("").last == ":"}
         
       when index_array.size >1 && !index_array.include?(0)
       
+      end
     end
   end
-end
-  
+
   
   
   
