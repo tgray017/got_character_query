@@ -2,7 +2,7 @@ require 'pry'
 
 
 values = 
-["A Game of Thrones (1996):",
+["A Game of Thrones (1996)",
 "Some other thing",
 "Television",
 "Winter Is Coming (2011):",
@@ -49,6 +49,7 @@ if values.any? {|value| value.split("").last == ":"}
         subproperties[subproperty] = subvalues
         property_array << subproperties
         properties[property] = property_array
+        
       when index_array.size == 1 && !index_array.include?(0)
         subproperties = {}
         subvalues = []
@@ -90,42 +91,26 @@ if values.any? {|value| value.split("").last == ":"}
         binding.pry
         
       when index_array.size >1 && !index_array.include?(0)
-      
+        subproperties = {}
+        subvalues = []
+        if i < index_array.first
+          property_array << v
+        elsif index_array.include?(i)
+          c1 = 0
+          subproperty = v.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
+          
+          while c1 <= index_array.last
+            while (!index_array[c1+1].nil? && (i+c) > index_array[c1] && (i+c) < index_array[c1+1]) || (i == index_array.last && i + c < values.size)
+              subvalues << values[i+c]
+              c += 1
+            end
+            c1 += 1
+          end
+          subproperties[subproperty] = subvalues
+          property_array << subproperties
+        end
+        properties[property] = property_array
+        binding.pry
       end
     end
   end
-
-  
-  
-  
-  
-  
-#  values.each_with_index do |value, index|
-#    if value.split('').last == ':'
-#      subproperties = {}
-#      subproperty = value.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
-#      subvalues = []
-#      
-#      counter = 1
-#      while counter + index < values.size && values[index + counter].split('').last != ':'
-#        subvalues << values[index + counter]
-#        counter += 1
-#      end
-#      subproperties[subproperty] = subvalues
-#      property_array << subproperties
-#      properties[property] = property_array
-#    elsif properties.values.last.instance_of?(Array) && properties.values.last.any? {|e| e.is_a?(Hash)} && properties.values.last.collect {|hash| hash.values}.flatten.include?(value)
-#      # If the previous entry in the properties hash is an array of hashes and one of the hashes includes a value equal to the current value, do nothing so that the subproperty values aren't included as values in the level above
-#    else
-#      if values.size > 1
-#        value_array = []
-#        values.each {|value| value_array << value}
-#        properties[property] = value_array
-#      else
-#        properties[property] = value
-#      end
-#    end
-#    
-#    binding.pry
-#  end
-#end
