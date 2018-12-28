@@ -8,8 +8,16 @@ values =
 "Winter Is Coming (2011):",
 "Another thing",
 "One last thing",
-"Video game",
-"The Lost Lords (2015)"]
+"Video game:",
+"The Lost Lords (2015)",
+"The Lost Lords (2016)",
+"The Lost Lords (2017)",
+"The Lost Lords (2018)",
+"asdf fdffdf:",
+"The Lost Lords (2015)",
+"The Lost Lords (2016)",
+"The Lost Lords (2017)",
+"The Lost Lords (2018)"]
 
 properties = {}
 property = :first_appearance
@@ -64,18 +72,16 @@ if values.any? {|value| value.split("").last == ":"}
       when index_array.size >1 && index_array.include?(0)
         subproperties = {}
         subvalues = []
-        
-        #if the current value's index is included in the index array...
         if index_array.include?(i)
-          c2 = 1
-          
-          #then the subproperty is the current value as a symbol...
+          c1 = 0
           subproperty = v.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
           
-          #and while the next value's index is less than the next index in the index_array
-          while (!index_array[i + 1].nil? && i + c2 < index_array[i + 1]) || (i == index_array.last && i + c2 < values.size)
-            subvalues << values[i + c2]
-            c2 += 1
+          while c1 <= index_array.last
+            while (!index_array[c1+1].nil? && (i+c) > index_array[c1] && (i+c) < index_array[c1+1]) || (i == index_array.last && i + c < values.size)
+              subvalues << values[i+c]
+              c += 1
+            end
+            c1 += 1
           end
           subproperties[subproperty] = subvalues
           property_array << subproperties
