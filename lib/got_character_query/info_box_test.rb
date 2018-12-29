@@ -30,15 +30,15 @@ class Character
     properties = {}
     
     info_box.each_with_index do |element, index|
-      binding.pry
+      #binding.pry
       unless element.xpath('.//th[@scope="row"]').empty?
         temp_property = element.xpath('.//th[@scope="row"]')
-        temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td')
-        property = temp.text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
-        binding.pry
+        temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td').text
+        property = temp_property.text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
+        #binding.pry
         values = []
         #binding.pry
-        values = info_box[index].xpath('td').text.strip.split(/\n+/)
+        values = temp_values.strip.split(/\n+/)
         #testing.each do |value| 
         #  values << value.text
         #end
@@ -80,7 +80,7 @@ class Character
         end
       end
     end
-    #binding.pry
+    binding.pry
   end
   
   
