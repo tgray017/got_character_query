@@ -33,12 +33,24 @@ class Character
       #binding.pry
       unless element.xpath('.//th[@scope="row"]').empty?
         temp_property = element.xpath('.//th[@scope="row"]')
-        temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td').text
+        temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td')
+        #binding.pry
         property = temp_property.text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
         #binding.pry
         values = []
         #binding.pry
-        values = temp_values.strip.split(/\n+/)
+        temp_values.each do |val|
+          #binding.pry
+          if val.css('li').empty? && val.css('br').empty?
+            values << val.text
+          elsif val.css('br').empty?
+            val.css('li').each {|subval| values << subval.text}
+          elsif val.css('li').empty?
+            binding.pry
+            val.css('br').each {|subval| values << subval.text}
+            #try splitting the values before and after the br tag and then iterating over the text in each
+          end
+        end
         #testing.each do |value| 
         #  values << value.text
         #end
