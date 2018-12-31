@@ -47,8 +47,13 @@ class Character
             val.css('li').each {|subval| values << subval.text}
           elsif val.css('li').empty?
             binding.pry
-            val.css('br').each {|subval| values << subval.text}
+            #val.each {|subval| values << val.xpath('.//br/preceding-sibling::node()').text}
+            values << val.xpath('.//br/preceding-sibling::node()').text
+            values << val.xpath('.//br/following-sibling::node()').text
             #try splitting the values before and after the br tag and then iterating over the text in each
+            #this almost works: val.xpath('.//text()').each {|v| puts v.text}
+            #this kind of splits in val.xpath('.//br/following-sibling::node()').text
+            #as well as this val.xpath('.//br/preceding-sibling::node()').text
           end
         end
         #testing.each do |value| 
