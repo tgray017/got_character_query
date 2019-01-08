@@ -30,7 +30,6 @@ class Character
     properties = {}
     
     info_box.each_with_index do |element, index|
-      #binding.pry
       unless element.xpath('.//th[@scope="row"]').empty?
         temp_property = element.xpath('.//th[@scope="row"]')
         temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td')

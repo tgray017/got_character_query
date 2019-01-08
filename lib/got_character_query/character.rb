@@ -75,7 +75,6 @@ class Character
         end
       end
     end
-    binding.pry
   end
   
   
@@ -93,17 +92,26 @@ class Character
   end
   
   
-  def characters
+  def overview
     
   end
   
-  def houses
+  def self.list_all_characters
+    c = 1
+    self.all.each do |char| 
+      puts "#{c}. #{char.name}"
+      c += 1
+    end
+  end
+  
+  def self.list_characters_by_house
     
   end
   
-  def kingdoms
+  def self.list_characters_by_kingdom
     
   end
+
   
   
   
@@ -111,4 +119,5 @@ class Character
 end
 
 Character.scrape_for_characters
+Character.list_all_characters
 # binding.pry
