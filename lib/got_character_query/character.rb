@@ -75,6 +75,13 @@ class Character
         end
       end
     end
+
+    # Need to figure out how to dynamically create attr_accessors for the each key/value pair
+    properties.each do |k, v|
+      binding.pry
+      self.send("#{k}=", v)
+    end
+    
   end
   
   
@@ -104,7 +111,7 @@ class Character
     end
   end
   
-  def self.list_characters_by_house
+  def self.list_characters_by_house(house)
     
   end
   
@@ -119,5 +126,5 @@ class Character
 end
 
 Character.scrape_for_characters
-Character.list_all_characters
+#Character.list_all_characters
 # binding.pry
