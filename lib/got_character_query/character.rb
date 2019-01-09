@@ -3,7 +3,7 @@ require 'pry'
 require 'nokogiri'
 
 class Character
-  attr_reader :name, :link_to_bio, :overview, :properties
+  attr_reader :name, :link_to_bio, :overview
   
   @@all = []
   
@@ -76,15 +76,12 @@ class Character
       end
     end
 
-    # Need to figure out how to dynamically create attr_accessors for the each key/value pair
     properties.each do |k, v|
-      binding.pry
+      self.class.send(:attr_accessor, k) unless self.class.instance_methods.include?(k)
       self.send("#{k}=", v)
     end
     
   end
-  
-  
   
   def initialize(name, link_to_bio = "N/A", overview)
     @name = name
@@ -98,14 +95,10 @@ class Character
     @@all << self
   end
   
-  
-  def overview
-    
-  end
-  
   def self.list_all_characters
     c = 1
-    self.all.each do |char| 
+    char_list = self.all.sort_by {|char| char.name}
+    char_list.each do |char| 
       puts "#{c}. #{char.name}"
       c += 1
     end
@@ -115,7 +108,7 @@ class Character
     
   end
   
-  def self.list_characters_by_kingdom
+  def self.list_characters_by_kingdom(kingdom)
     
   end
 
@@ -126,5 +119,5 @@ class Character
 end
 
 Character.scrape_for_characters
-#Character.list_all_characters
+Character.list_all_characters
 # binding.pry
