@@ -3,7 +3,7 @@ require 'pry'
 require 'nokogiri'
 
 class Character
-  attr_reader :name, :link_to_bio, :overview, :properties
+  attr_reader :name, :link_to_bio, :overview
   
   @@all = []
   
@@ -30,21 +30,16 @@ class Character
     properties = {}
     
     info_box.each_with_index do |element, index|
-      unless element.xpath('.//th[@scope="row"]').empty?
-        property = element.xpath('.//th[@scope="row"]').text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
+      unless element.css('th[scope="row"]').empty?
+        property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
         values = []
-        temp_values = element.xpath('.//th[@scope="row"]//following-sibling::td')
-        temp_values.each do |val| 
-          if val.css('li').empty? && val.css('br').empty?
-            values << val.text
-          elsif val.css('br').empty?
-            val.css('li').each {|subval| values << subval.text}
-          else
-            #binding.pry
-            values << val.text
-          end
+        testing = info_box[index].css('td').xpath('..//descendant-or-self::li|a | ..//descendant-or-self::td[not(*)]')
+        testing.each do |value| 
+          values << value.text
         end
-
+        #changing from li to node() triples the values for some reason. Need to find a way for td's to be included for td's that are themselves the value. Not sure why the -or-self isn't accomplishing this
+        #need to find a way to include some td values, (e.g. Successor > Robb Stark)
+        
         property_array = []
         index_array = []
 
@@ -78,12 +73,17 @@ class Character
         else
           properties[property] = values
         end
-      end 
+      end
     end
     binding.pry
+
+    properties.each do |k, v|
+      self.class.send(:attr_accessor, k) unless self.class.instance_methods.include?(k)
+      self.send("#{k}=", v)
+      binding.pry
+    end
+    
   end
-  
-  
   
   def initialize(name, link_to_bio = "N/A", overview)
     @name = name
@@ -97,18 +97,33 @@ class Character
     @@all << self
   end
   
-  
-  def characters
-    
+  def self.list_all_characters
+    c = 1
+    char_list = self.all.sort_by {|char| char.name}
+    char_list.each do |char| 
+      puts "#{c}. #{char.name}"
+      c += 1
+    end
   end
   
-  def houses
-    
+  
+  ## Need to append anything under novel, novels, television, video game, video games with a *, **, and *** respectively so that there are no subhashes
+  ## Should this be stored in the hash itself, so that there are no subhashes in the property array?
+  def self.list_all_houses
+    c = 1
+    house_list = []
+    self.all.each {|char| house_list << char.family unless char.family.nil?}
+    binding.pry
+    house_list.sort.uniq.each do |house| 
+      puts "#{c}. #{house}"
+      c += 1
+    end
   end
   
-  def kingdoms
+  def self.list_characters_by_kingdom(kingdom)
     
   end
+
   
   
   
@@ -116,4 +131,5 @@ class Character
 end
 
 Character.scrape_for_characters
+# Character.list_all_houses
 # binding.pry

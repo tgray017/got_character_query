@@ -75,6 +75,7 @@ class Character
         end
       end
     end
+    binding.pry
 
     properties.each do |k, v|
       self.class.send(:attr_accessor, k) unless self.class.instance_methods.include?(k)
@@ -104,8 +105,18 @@ class Character
     end
   end
   
-  def self.list_characters_by_house(house)
-    
+  
+  ## Need to append anything under novel, novels, television, video game, video games with a *, **, and *** respectively so that there are no subhashes
+  ## Should this be stored in the hash itself, so that there are no subhashes in the property array?
+  def self.list_all_houses
+    c = 1
+    house_list = []
+    self.all.each {|char| house_list << char.family unless char.family.nil?}
+    binding.pry
+    house_list.sort.uniq.each do |house| 
+      puts "#{c}. #{house}"
+      c += 1
+    end
   end
   
   def self.list_characters_by_kingdom(kingdom)
@@ -119,5 +130,5 @@ class Character
 end
 
 Character.scrape_for_characters
-Character.list_all_characters
+# Character.list_all_houses
 # binding.pry
