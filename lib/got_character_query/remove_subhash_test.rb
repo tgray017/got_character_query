@@ -37,8 +37,6 @@ class Character
         testing.each do |value| 
           values << value.text
         end
-        #changing from li to node() triples the values for some reason. Need to find a way for td's to be included for td's that are themselves the value. Not sure why the -or-self isn't accomplishing this
-        #need to find a way to include some td values, (e.g. Successor > Robb Stark)
         
         property_array = []
         index_array = []
@@ -56,31 +54,36 @@ class Character
               property_array << v
             elsif index_array.include?(i)
               c1 = 0
-              subproperty = v.delete(':').downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
+              subproperty = v.delete(':').downcase
               
               while c1 <= index_array.last
                 while (!index_array[c1 + 1].nil? && (i+c) > index_array[c1] && (i + c) < index_array[c1 + 1]) || (i == index_array.last && i + c < values.size)
-                  subvalues << values[i + c]
+                  if subproperty == "novel" || subproperty == "novels"
+                    subvalues << values[i+c].split("").push("*").join
+                  elsif subproperty == "television"
+                    subvalues << values[i+c].split("").push("**").join
+                  elsif subproperty == "video game"
+                    subvalues << values[i+c].split("").push("***").join
+                  else
+                    subvalues << values[i+c]
+                  end
                   c += 1
                 end
                 c1 += 1
               end
-              subproperties[subproperty] = subvalues
-              property_array << subproperties
+              property_array << subvalues
             end
-            properties[property] = property_array
+            properties[property] = property_array.flatten
           end
         else
           properties[property] = values
         end
       end
     end
-    binding.pry
 
     properties.each do |k, v|
       self.class.send(:attr_accessor, k) unless self.class.instance_methods.include?(k)
       self.send("#{k}=", v)
-      binding.pry
     end
     
   end
@@ -99,9 +102,11 @@ class Character
   
   def self.list_all_characters
     c = 1
-    char_list = self.all.sort_by {|char| char.name}
-    char_list.each do |char| 
-      puts "#{c}. #{char.name}"
+    character_list = []
+    self.all.each {|char| character_list << char.name unless char.name.nil?}
+    character_list = character_list.flatten.collect {|h| h.gsub("*", "")}
+    character_list.uniq.sort.each do |character| 
+      puts "#{c}. #{character}"
       c += 1
     end
   end
@@ -109,27 +114,49 @@ class Character
   
   ## Need to append anything under novel, novels, television, video game, video games with a *, **, and *** respectively so that there are no subhashes
   ## Should this be stored in the hash itself, so that there are no subhashes in the property array?
+  ## Technically need to account for the following subhash values:
+  # => [:novel,
+  #  :television,
+  #  :novels,
+  #  :video_game,
+  #  :with_jaime,
+  #  :with_robert,
+  #  :foster_family]
+  
   def self.list_all_houses
     c = 1
     house_list = []
     self.all.each {|char| house_list << char.family unless char.family.nil?}
-    binding.pry
-    house_list.sort.uniq.each do |house| 
+    house_list = house_list.flatten.collect {|h| h.gsub("*", "")}
+    house_list.uniq.sort.each do |house| 
       puts "#{c}. #{house}"
       c += 1
     end
   end
   
+  def self.list_all_kingdoms
+    c = 1
+    kingdom_list = []
+    self.all.each {|char| kingdom_list << char.kingdom unless char.kingdom.nil?}
+    kingdom_list = kingdom_list.flatten.collect {|h| h.gsub("*", "")}
+    kingdom_list.uniq.sort.each do |kingdom| 
+      puts "#{c}. #{kingdom}"
+      c += 1
+    end
+  end
+
+  def self.list_characters_by_house(house)
+    
+  end
+  
   def self.list_characters_by_kingdom(kingdom)
     
   end
-
-  
   
   
   
 end
 
 Character.scrape_for_characters
-# Character.list_all_houses
-# binding.pry
+Character.list_all_characters
+binding.pry
