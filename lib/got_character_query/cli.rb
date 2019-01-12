@@ -37,12 +37,15 @@ class GotCharacterQuery::CLI
           list_all_characters
           puts "Enter the number associated with the character that you're interested in."
           input = gets.strip.to_i
-          character_name = sort_characters[input_to_index(input)]
-          binding.pry
+          char_name = sort_characters[input_to_index(input)]
+          display_character_overview(char_name)
         when 2
           puts "Which house?"
           list_all_houses
           puts "Enter the number associated with the house that you're interested in."
+          input = gets.strip.to_i
+          house_name = sort_houses[input_to_index(input)]
+          display_characters_by_house(house_name)
         when 3
           puts "Which kingdom?"
           list_all_kingdoms
@@ -102,6 +105,22 @@ class GotCharacterQuery::CLI
 
   def input_to_index(input)
     input - 1
+  end
+  
+  def display_character_overview(char_name)
+    overview = []
+    Character.all.each {|c| overview << c.overview if c.name == char_name}
+    puts "#{overview[0]}"
+  end
+  
+  def display_characters_by_house(house_name)
+    characters = []
+    Character.all.each do |char|
+      unless char.family.nil? 
+        characters << char.name if char.family.include? house_name
+      end
+    end
+    puts "#{characters}"
   end
   
   
