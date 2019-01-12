@@ -12,3 +12,8 @@ require "got_character_query"
 
 require "irb"
 IRB.start(__FILE__)
+
+# Run this to experiment:
+# GotCharacterQuery::CLI.new.call
+
+GotCharacterQuery::CLI.new.list_all_characters
