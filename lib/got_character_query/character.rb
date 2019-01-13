@@ -91,19 +91,11 @@ class Character
   def initialize(name, link_to_bio = "N/A", overview)
     @name = name
     @link_to_bio = link_to_bio
-    
     unless link_to_bio == "N/A"
       scrape_character_properties(link_to_bio)
     end
-    
     @overview = overview
     @@all << self
-  end
-  
-  def self.sort_attribute(attribute)
-    list = []
-    Character.all.each {|char| list << char.send(attribute) unless char.send(attribute).nil?}
-    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
   end
   
 end

@@ -5,6 +5,7 @@ require 'pry'
 
 
 class GotCharacterQuery::CLI
+  attr_accessor :input
   
   def call
     Character.scrape_for_characters
@@ -14,10 +15,10 @@ class GotCharacterQuery::CLI
   end
   
   def menu
-    input = nil
+    self.input = nil
     while input != 4
       puts "Choose from the following options to learn more about your favorite GoT characters:"
-      puts <<-HEREDOC  
+      puts <<-HEREDOC
         1. List all characters
         2. List characters by house
         3. List characters by kingdom
@@ -26,62 +27,46 @@ class GotCharacterQuery::CLI
       HEREDOC
       puts "Enter 1, 2, 3 or 4."
       
-      input = gets.strip.to_i
+      self.input = gets.strip.to_i
       case input
         when 1
           puts "Listing all characters..."
-          list_all_characters
-          instruction("character")
-          input = gets.strip.to_i
-          while !input.between?(1, sort_attribute("name").size)
-            invalid_option
-            instruction("character")
-            input = gets.strip.to_i
-          end
+          submenu_1("name")
           char_name = sort_attribute("name")[input_to_index(input)]
           display_character_overview(char_name)
+          self.input = nil
         when 2
-          puts "Which house?"
-          list_all_houses
-          instruction("house")
-          input = gets.strip.to_i
-          while !input.between?(1, sort_attribute("family").size)
-            invalid_option
-            instruction("house")
-            input = gets.strip.to_i
-          end
+          puts "Which family?"
+          submenu_1("family")
           house_name = sort_attribute("family")[input_to_index(input)]
-          list_characters_by_house(house_name)
+          
+          list_characters_by_attribute("family", house_name)
           instruction("character")
           input = gets.strip.to_i
-          while !input.between?(1, sort_characters_by_house(house_name).size)
+          while !input.between?(1, sort_characters_by_attribute("family", house_name).size)
             invalid_option
             instruction("character")
             input = gets.strip.to_i
           end
-          char_name = sort_characters_by_house(house_name)[input_to_index(input)]
+          char_name = sort_characters_by_attribute("family", house_name)[input_to_index(input)]
           display_character_overview(char_name)
+          input = nil
         when 3
           puts "Which kingdom?"
-          list_all_kingdoms
-          instruction("kingdom")
-          input = gets.strip.to_i
-          while !input.between?(1, sort_attribute("kingdom").size)
-            invalid_option
-            instruction("kingdom")
-            input = gets.strip.to_i
-          end
+          submenu_1("kingdom")
           kingdom_name = sort_attribute("kingdom")[input_to_index(input)]
-          list_characters_by_kingdom(kingdom_name)
+          
+          list_characters_by_attribute("kingdom", kingdom_name)
           instruction("character")
           input = gets.strip.to_i
-          while !input.between?(1, sort_characters_by_kingdom(kingdom_name).size)
+          while !input.between?(1, sort_characters_by_attribute("kingdom", kingdom_name).size)
             invalid_option
             instruction("character")
             input = gets.strip.to_i
           end
-          char_name = sort_characters_by_kingdom(kingdom_name)[input_to_index(input)]
+          char_name = sort_characters_by_attribute("kingdom", kingdom_name)[input_to_index(input)]
           display_character_overview(char_name)
+          input = nil
         when 4
         else
           invalid_option
@@ -105,33 +90,23 @@ class GotCharacterQuery::CLI
   def invalid_option
     puts "Invalid option."
   end
-  
-  def list_all_characters
-    c = 1
-    sort_characters.each do |character| 
-      puts "#{c}. #{character}"
-      c += 1
-    end
-  end
-  
-  def list_all_houses
-    c = 1
-    sort_houses.each do |house| 
-      puts "#{c}. #{house}"
-      c += 1
-    end
-  end
-  
-  def list_all_kingdoms
-    c = 1
-    sort_kingdoms.each do |kingdom| 
-      puts "#{c}. #{kingdom}"
-      c += 1
-    end
-  end
 
   def input_to_index(input)
     input - 1
+  end
+
+  def list_all_attributes(attribute)
+    c = 1
+    sort_attribute(attribute).each do |a| 
+      puts "#{c}. #{a}"
+      c += 1
+    end
+  end
+  
+  def sort_attribute(attribute)
+    list = []
+    Character.all.each {|char| list << char.send(attribute) unless char.send(attribute).nil?}
+    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
   end
   
   def display_character_overview(char_name)
@@ -140,46 +115,37 @@ class GotCharacterQuery::CLI
     puts "#{overview[0]}"
   end
   
-  def list_characters_by_house(house_name)
-    c = 1
-    sort_characters_by_house(house_name).each do |char_name| 
-      puts "#{c}. #{char_name}"
-      c += 1
-    end
-  end
-  
-  def sort_characters_by_house(house_name)
+  def sort_characters_by_attribute(attribute, selection)
     characters = []
     Character.all.each do |char|
-      unless char.family.nil? 
-        characters << char.name if char.family.include? house_name
+      unless char.send(attribute).nil? 
+        characters << char.name if char.send(attribute).include? selection
       end
     end
     characters.sort
   end
   
-  def list_characters_by_kingdom(kingdom_name)
+  def list_characters_by_attribute(attribute, selection)
     c = 1
-    sort_characters_by_kingdom(kingdom_name).each do |char_name| 
+    sort_characters_by_attribute(attribute, selection).each do |char_name| 
       puts "#{c}. #{char_name}"
       c += 1
     end
   end
   
-  def sort_characters_by_kingdom(kingdom_name)
-    characters = []
-    Character.all.each do |char|
-      unless char.kingdom.nil? 
-        characters << char.name if char.kingdom.include? kingdom_name
-      end
+  def submenu_1(selection)
+    list_all_attributes(selection)
+    instruction(selection)
+    self.input = gets.strip.to_i
+    while !input.between?(1, sort_attribute(selection).size)
+      invalid_option
+      instruction(selection)
+      self.input = gets.strip.to_i
     end
-    characters.sort
   end
-
-  def sort_attribute(attribute)
-    list = []
-    Character.all.each {|char| list << char.send(attribute) unless char.send(attribute).nil?}
-    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
+  
+  def submenu_2(selection)
+    
   end
   
 end
