@@ -13,10 +13,6 @@ class GotCharacterQuery::CLI
     goodbye
   end
   
-  def greeting
-    puts "Welcome to GoT Character Query!"
-  end
-  
   def menu
     input = nil
     while input != 4
@@ -35,10 +31,11 @@ class GotCharacterQuery::CLI
         when 1
           puts "Listing all characters..."
           list_all_characters
-          puts "Enter the number associated with the character that you're interested in."
+          instruction("character")
           input = gets.strip.to_i
           while !input.integer? || !input.between?(1, sort_characters.size)
-            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            invalid_option
+            instruction("character")
             input = gets.strip.to_i
           end
           char_name = sort_characters[input_to_index(input)]
@@ -46,18 +43,20 @@ class GotCharacterQuery::CLI
         when 2
           puts "Which house?"
           list_all_houses
-          puts "Enter the number associated with the house that you're interested in."
+          instruction("house")
           input = gets.strip.to_i
           while !input.integer? || !input.between?(1, sort_houses.size)
-            puts "Invalid option. Enter the number associated with the house that you're interested in."
+            invalid_option
+            instruction("house")
             input = gets.strip.to_i
           end
           house_name = sort_houses[input_to_index(input)]
           list_characters_by_house(house_name)
-          puts "Enter the number associated with the character that you're interested in."
+          instruction("character")
           input = gets.strip.to_i
           while !input.integer? || !input.between?(1, sort_characters_by_house(house_name).size)
-            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            invalid_option
+            instruction("character")
             input = gets.strip.to_i
           end
           char_name = sort_characters_by_house(house_name)[input_to_index(input)]
@@ -65,31 +64,46 @@ class GotCharacterQuery::CLI
         when 3
           puts "Which kingdom?"
           list_all_kingdoms
-          puts "Enter the number associated with the kingdom that you're interested in."
+          instruction("kingdom")
           input = gets.strip.to_i
           while !input.integer? || !input.between?(1, sort_kingdoms.size)
-            puts "Invalid option. Enter the number associated with the kingdom that you're interested in."
+            invalid_option
+            instruction("kingdom")
             input = gets.strip.to_i
           end
           kingdom_name = sort_kingdoms[input_to_index(input)]
           list_characters_by_kingdom(kingdom_name)
-          puts "Enter the number associated with the character that you're interested in."
+          instruction("character")
           input = gets.strip.to_i
           while !input.integer? || !input.between?(1, sort_characters_by_kingdom(kingdom_name).size)
-            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            invalid_option
+            instruction("character")
             input = gets.strip.to_i
           end
           char_name = sort_characters_by_kingdom(kingdom_name)[input_to_index(input)]
           display_character_overview(char_name)
         when 4
         else
-          puts "Invalid option. Enter 1, 2, 3 or 4."
+          invalid_option
+          puts "Enter 1, 2, 3 or 4."
       end
     end
   end
   
+  def greeting
+    puts "Welcome to GoT Character Query!"
+  end
+  
   def goodbye
     puts "And now your watch is ended. Goodbye."
+  end
+  
+  def instruction(selection)
+    puts "Enter the number associated with the #{selection} that you're interested in."
+  end
+  
+  def invalid_option
+    puts "Invalid option."
   end
   
   def sort_characters
@@ -179,7 +193,6 @@ class GotCharacterQuery::CLI
     end
     characters.sort
   end
-  
   
 end
 
