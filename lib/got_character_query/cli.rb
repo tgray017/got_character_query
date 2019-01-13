@@ -33,28 +33,28 @@ class GotCharacterQuery::CLI
           list_all_characters
           instruction("character")
           input = gets.strip.to_i
-          while !input.integer? || !input.between?(1, sort_characters.size)
+          while !input.between?(1, sort_attribute("name").size)
             invalid_option
             instruction("character")
             input = gets.strip.to_i
           end
-          char_name = sort_characters[input_to_index(input)]
+          char_name = sort_attribute("name")[input_to_index(input)]
           display_character_overview(char_name)
         when 2
           puts "Which house?"
           list_all_houses
           instruction("house")
           input = gets.strip.to_i
-          while !input.integer? || !input.between?(1, sort_houses.size)
+          while !input.between?(1, sort_attribute("family").size)
             invalid_option
             instruction("house")
             input = gets.strip.to_i
           end
-          house_name = sort_houses[input_to_index(input)]
+          house_name = sort_attribute("family")[input_to_index(input)]
           list_characters_by_house(house_name)
           instruction("character")
           input = gets.strip.to_i
-          while !input.integer? || !input.between?(1, sort_characters_by_house(house_name).size)
+          while !input.between?(1, sort_characters_by_house(house_name).size)
             invalid_option
             instruction("character")
             input = gets.strip.to_i
@@ -66,16 +66,16 @@ class GotCharacterQuery::CLI
           list_all_kingdoms
           instruction("kingdom")
           input = gets.strip.to_i
-          while !input.integer? || !input.between?(1, sort_kingdoms.size)
+          while !input.between?(1, sort_attribute("kingdom").size)
             invalid_option
             instruction("kingdom")
             input = gets.strip.to_i
           end
-          kingdom_name = sort_kingdoms[input_to_index(input)]
+          kingdom_name = sort_attribute("kingdom")[input_to_index(input)]
           list_characters_by_kingdom(kingdom_name)
           instruction("character")
           input = gets.strip.to_i
-          while !input.integer? || !input.between?(1, sort_characters_by_kingdom(kingdom_name).size)
+          while !input.between?(1, sort_characters_by_kingdom(kingdom_name).size)
             invalid_option
             instruction("character")
             input = gets.strip.to_i
@@ -106,24 +106,6 @@ class GotCharacterQuery::CLI
     puts "Invalid option."
   end
   
-  def sort_characters
-    list = []
-    Character.all.each {|char| list << char.name unless char.name.nil?}
-    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
-  end
-  
-  def sort_houses
-    list = []
-    Character.all.each {|char| list << char.family unless char.family.nil?}
-    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
-  end
-  
-  def sort_kingdoms
-    list = []
-    Character.all.each {|char| list << char.kingdom unless char.kingdom.nil?}
-    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
-  end
-
   def list_all_characters
     c = 1
     sort_characters.each do |character| 
@@ -193,10 +175,15 @@ class GotCharacterQuery::CLI
     end
     characters.sort
   end
+
+  def sort_attribute(attribute)
+    list = []
+    Character.all.each {|char| list << char.send(attribute) unless char.send(attribute).nil?}
+    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
+  end
   
 end
 
 #Remove the below (just used for testing)
-something = GotCharacterQuery::CLI.new
-something.call
+something = GotCharacterQuery::CLI.new.call
 #something.menu

@@ -100,15 +100,10 @@ class Character
     @@all << self
   end
   
-  def self.sort_property(property)
-    property_list = []
-    binding.pry
-    self.all.each {|char| property_list << char.property unless char.property.nil?}
-    property_list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
+  def self.sort_attribute(attribute)
+    list = []
+    Character.all.each {|char| list << char.send(attribute) unless char.send(attribute).nil?}
+    list.flatten.collect {|h| h.gsub("*", "")}.uniq.sort
   end
   
 end
-
-#Character.scrape_for_characters
-#Character.sort_property(name)
-
