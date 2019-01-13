@@ -1,6 +1,7 @@
 require_relative './version'
 require_relative './character'
 require 'pry'
+require 'colorize'
 #Remove these requires before submitting
 
 
@@ -76,7 +77,7 @@ class GotCharacterQuery::CLI
   def list_all_attributes(attribute)
     c = 1
     sort_attribute(attribute).each do |a| 
-      puts "#{c}. #{a}"
+      puts "#{c}. #{a}".green
       c += 1
     end
   end
@@ -90,7 +91,7 @@ class GotCharacterQuery::CLI
   def display_character_overview(char_name)
     overview = []
     Character.all.each {|c| overview << c.overview if c.name == char_name}
-    puts "#{overview[0]}"
+    puts "#{overview[0]}".red
   end
   
   def sort_characters_by_attribute(attribute, selection)
@@ -106,7 +107,7 @@ class GotCharacterQuery::CLI
   def list_characters_by_attribute(attribute, selection)
     c = 1
     sort_characters_by_attribute(attribute, selection).each do |char_name| 
-      puts "#{c}. #{char_name}"
+      puts "#{c}. #{char_name}".green
       c += 1
     end
   end
