@@ -5,7 +5,7 @@ require 'pry'
 
 
 class GotCharacterQuery::CLI
-  attr_accessor :input
+  attr_accessor :input, :house_name, :kingdom_name
   
   def call
     Character.scrape_for_characters
@@ -38,35 +38,13 @@ class GotCharacterQuery::CLI
         when 2
           puts "Which family?"
           submenu_1("family")
-          house_name = sort_attribute("family")[input_to_index(input)]
-          
-          list_characters_by_attribute("family", house_name)
-          instruction("character")
-          input = gets.strip.to_i
-          while !input.between?(1, sort_characters_by_attribute("family", house_name).size)
-            invalid_option
-            instruction("character")
-            input = gets.strip.to_i
-          end
-          char_name = sort_characters_by_attribute("family", house_name)[input_to_index(input)]
-          display_character_overview(char_name)
-          input = nil
+          self.house_name = sort_attribute("family")[input_to_index(input)]
+          submenu_2("family", house_name)
         when 3
           puts "Which kingdom?"
           submenu_1("kingdom")
-          kingdom_name = sort_attribute("kingdom")[input_to_index(input)]
-          
-          list_characters_by_attribute("kingdom", kingdom_name)
-          instruction("character")
-          input = gets.strip.to_i
-          while !input.between?(1, sort_characters_by_attribute("kingdom", kingdom_name).size)
-            invalid_option
-            instruction("character")
-            input = gets.strip.to_i
-          end
-          char_name = sort_characters_by_attribute("kingdom", kingdom_name)[input_to_index(input)]
-          display_character_overview(char_name)
-          input = nil
+          self.kingdom_name = sort_attribute("kingdom")[input_to_index(input)]
+          submenu_2("kingdom", kingdom_name)
         when 4
         else
           invalid_option
@@ -144,8 +122,18 @@ class GotCharacterQuery::CLI
     end
   end
   
-  def submenu_2(selection)
-    
+  def submenu_2(attribute, selection)
+    list_characters_by_attribute(attribute, selection)
+    instruction("character")
+    self.input = gets.strip.to_i
+    while !input.between?(1, sort_characters_by_attribute(attribute, selection).size)
+      invalid_option
+      instruction("character")
+      self.input = gets.strip.to_i
+    end
+    char_name = sort_characters_by_attribute(attribute, selection)[input_to_index(input)]
+    display_character_overview(char_name)
+    self.input = nil
   end
   
 end
