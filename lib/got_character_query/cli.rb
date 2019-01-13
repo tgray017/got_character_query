@@ -8,9 +8,9 @@ class GotCharacterQuery::CLI
   
   def call
     Character.scrape_for_characters
-    #greeting
-    #menu
-    #goodbye
+    greeting
+    menu
+    goodbye
   end
   
   def greeting
@@ -37,6 +37,10 @@ class GotCharacterQuery::CLI
           list_all_characters
           puts "Enter the number associated with the character that you're interested in."
           input = gets.strip.to_i
+          while !input.integer? || !input.between?(1, sort_characters.size)
+            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            input = gets.strip.to_i
+          end
           char_name = sort_characters[input_to_index(input)]
           display_character_overview(char_name)
         when 2
@@ -44,12 +48,39 @@ class GotCharacterQuery::CLI
           list_all_houses
           puts "Enter the number associated with the house that you're interested in."
           input = gets.strip.to_i
+          while !input.integer? || !input.between?(1, sort_houses.size)
+            puts "Invalid option. Enter the number associated with the house that you're interested in."
+            input = gets.strip.to_i
+          end
           house_name = sort_houses[input_to_index(input)]
-          display_characters_by_house(house_name)
+          list_characters_by_house(house_name)
+          puts "Enter the number associated with the character that you're interested in."
+          input = gets.strip.to_i
+          while !input.integer? || !input.between?(1, sort_characters_by_house(house_name).size)
+            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            input = gets.strip.to_i
+          end
+          char_name = sort_characters_by_house(house_name)[input_to_index(input)]
+          display_character_overview(char_name)
         when 3
           puts "Which kingdom?"
           list_all_kingdoms
           puts "Enter the number associated with the kingdom that you're interested in."
+          input = gets.strip.to_i
+          while !input.integer? || !input.between?(1, sort_kingdoms.size)
+            puts "Invalid option. Enter the number associated with the kingdom that you're interested in."
+            input = gets.strip.to_i
+          end
+          kingdom_name = sort_kingdoms[input_to_index(input)]
+          list_characters_by_kingdom(kingdom_name)
+          puts "Enter the number associated with the character that you're interested in."
+          input = gets.strip.to_i
+          while !input.integer? || !input.between?(1, sort_characters_by_kingdom(kingdom_name).size)
+            puts "Invalid option. Enter the number associated with the character that you're interested in."
+            input = gets.strip.to_i
+          end
+          char_name = sort_characters_by_kingdom(kingdom_name)[input_to_index(input)]
+          display_character_overview(char_name)
         when 4
         else
           puts "Invalid option. Enter 1, 2, 3 or 4."
@@ -113,14 +144,40 @@ class GotCharacterQuery::CLI
     puts "#{overview[0]}"
   end
   
-  def display_characters_by_house(house_name)
+  def list_characters_by_house(house_name)
+    c = 1
+    sort_characters_by_house(house_name).each do |char_name| 
+      puts "#{c}. #{char_name}"
+      c += 1
+    end
+  end
+  
+  def sort_characters_by_house(house_name)
     characters = []
     Character.all.each do |char|
       unless char.family.nil? 
         characters << char.name if char.family.include? house_name
       end
     end
-    puts "#{characters}"
+    characters.sort
+  end
+  
+  def list_characters_by_kingdom(kingdom_name)
+    c = 1
+    sort_characters_by_kingdom(kingdom_name).each do |char_name| 
+      puts "#{c}. #{char_name}"
+      c += 1
+    end
+  end
+  
+  def sort_characters_by_kingdom(kingdom_name)
+    characters = []
+    Character.all.each do |char|
+      unless char.kingdom.nil? 
+        characters << char.name if char.kingdom.include? kingdom_name
+      end
+    end
+    characters.sort
   end
   
   
@@ -129,4 +186,4 @@ end
 #Remove the below (just used for testing)
 something = GotCharacterQuery::CLI.new
 something.call
-something.menu
+#something.menu
