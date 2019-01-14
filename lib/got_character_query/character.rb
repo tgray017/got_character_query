@@ -1,7 +1,3 @@
-require 'open-uri'
-require 'pry'
-require 'nokogiri'
-
 class Character
   attr_reader :name, :link_to_bio, :overview
   
@@ -74,12 +70,10 @@ class Character
         end
       end
     end
-
     properties.each do |k, v|
       self.class.send(:attr_accessor, k) unless self.class.instance_methods.include?(k)
       self.send("#{k}=", v)
     end
-    
   end
   
   def initialize(name, link_to_bio = "N/A", overview)

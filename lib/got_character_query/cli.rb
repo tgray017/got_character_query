@@ -1,12 +1,5 @@
-require_relative './version'
-require_relative './character'
-require 'pry'
-require 'colorize'
-#Remove these requires before submitting
-
-
 class GotCharacterQuery::CLI
-  attr_accessor :input, :house_name, :kingdom_name
+  attr_accessor :input, :house_name, :kingdom_name, :char_name
   
   def call
     Character.scrape_for_characters
@@ -33,19 +26,25 @@ class GotCharacterQuery::CLI
         when 1
           puts "Listing all characters..."
           submenu_1("name")
-          char_name = sort_attribute("name")[input_to_index(input)]
           display_character_overview(char_name)
+          display_character_properties(char_name)
           self.input = nil
         when 2
           puts "Which family?"
           submenu_1("family")
           self.house_name = sort_attribute("family")[input_to_index(input)]
           submenu_2("family", house_name)
+          display_character_overview(char_name)
+          display_character_properties(char_name)
+          self.input = nil
         when 3
           puts "Which kingdom?"
           submenu_1("kingdom")
           self.kingdom_name = sort_attribute("kingdom")[input_to_index(input)]
           submenu_2("kingdom", kingdom_name)
+          display_character_overview(char_name)
+          display_character_properties(char_name)
+          self.input = nil
         when 4
         else
           invalid_option
@@ -91,7 +90,8 @@ class GotCharacterQuery::CLI
   def display_character_overview(char_name)
     overview = []
     Character.all.each {|c| overview << c.overview if c.name == char_name}
-    puts "#{overview[0]}".red
+    puts "Overview:".red
+    puts "#{overview[0]}".light_blue
   end
   
   def sort_characters_by_attribute(attribute, selection)
@@ -121,6 +121,7 @@ class GotCharacterQuery::CLI
       instruction(selection)
       self.input = gets.strip.to_i
     end
+    self.char_name = sort_attribute("name")[input_to_index(input)]
   end
   
   def submenu_2(attribute, selection)
@@ -132,14 +133,40 @@ class GotCharacterQuery::CLI
       instruction("character")
       self.input = gets.strip.to_i
     end
-    char_name = sort_characters_by_attribute(attribute, selection)[input_to_index(input)]
-    display_character_overview(char_name)
-    self.input = nil
+    self.char_name = sort_characters_by_attribute(attribute, selection)[input_to_index(input)]
   end
   
+  def display_character_properties(char_name)
+    Character.all.each do |char|
+      if char.name == char_name
+        puts "Additional information:".red
+        asterisk_legend = []
+        char.class.instance_methods(false).each do |meth|
+          unless meth == "link_to_bio".to_sym || meth == "overview".to_sym || meth == "name".to_sym || meth == "scrape_character_properties".to_sym || meth.to_s[-1] == "=" || char.send("#{meth}").nil?
+            puts "#{meth.to_s.gsub("_", " ").capitalize}:".light_blue
+            char.send("#{meth}").each do |val|
+              puts "   #{val}".light_blue
+              if val[-3..-1] == "***"
+                message = "*** Indicates this property only applies to the video game."
+                asterisk_legend << message unless asterisk_legend.include? message
+              elsif val[-2..-1] == "**"
+                message = "** Indicates this property only applies to the TV show."
+                asterisk_legend << message unless asterisk_legend.include? message
+              elsif val[-1] == "*"
+                message = "* Indicates this property only applies to the novels."
+                asterisk_legend << message unless asterisk_legend.include? message
+              else
+              end
+            end
+          end
+        end
+        unless asterisk_legend.empty?
+          puts "\n"
+          asterisk_legend.sort.each {|m| puts "#{m}".light_blue}
+        end
+        puts "\nMore information available at: #{char.link_to_bio}.\n".yellow
+      end
+    end
+  end 
   
 end
-
-#Remove the below (just used for testing)
-something = GotCharacterQuery::CLI.new.call
-#something.menu
