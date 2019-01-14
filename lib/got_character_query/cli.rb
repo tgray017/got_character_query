@@ -137,6 +137,7 @@ class GotCharacterQuery::CLI
     self.input = nil
   end
   
+  
 end
 
 #Remove the below (just used for testing)

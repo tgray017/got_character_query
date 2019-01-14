@@ -1,8 +1,6 @@
 # GotCharacterQuery
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/got_character_query`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+This is a Ruby Gem that provides a CLI to list the main characters from the television show, "Game of Thrones", and to provide more information about each character. This list pulls from the following wiki page: https://en.wikipedia.org/wiki/List_of_Game_of_Thrones_characters
 
 ## Installation
 
@@ -22,7 +20,7 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+Run ```got_character_query``` on the command line and follow the prompts.
 
 ## Development
 
