@@ -59,7 +59,7 @@ class GotCharacterQuery::CLI
   end
   
   def goodbye
-    puts "And now your watch is ended. Goodbye."
+    puts "And now your watch is ended. Goodbye.".light_blue
   end
   
   def instruction(selection)

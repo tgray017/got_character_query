@@ -33,19 +33,13 @@ class Character
       unless element.css('th[scope="row"]').empty?
         property = element.css('th[scope="row"]').text.downcase.gsub(/\s+/, "_").gsub("(", "").gsub(")", "").to_sym
         values = []
-        testing = info_box[index].css('td').xpath('..//descendant-or-self::li|a | ..//descendant-or-self::td[not(*)]')
-        testing.each do |value| 
-          values << value.text
-        end
+        info_box[index].css('td').xpath('..//descendant-or-self::li|a | ..//descendant-or-self::td[not(*)]').each {|value| values << value.text}
         
         property_array = []
         index_array = []
 
         if values.any? {|value| value.split("").last == ":"}
-          values.each_with_index do |v, i| 
-            index_array << i if v.split("").last == ":"
-          end
-          
+          values.each_with_index {|v, i| index_array << i if v.split("").last == ":"}
           values.each_with_index do |v, i|
             c = 1
             subproperties = {}
