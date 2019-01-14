@@ -6,7 +6,7 @@ require "got_character_query/version"
 Gem::Specification.new do |spec|
   spec.name          = "got_character_query"
   spec.version       = GotCharacterQuery::VERSION
-  spec.authors       = ["'tgray017'"]
+  spec.authors       = ["'Thomas Gray'"]
   spec.email         = ["'tgray017@gmail.com'"]
 
   spec.summary       = %q{TODO: Write a short summary, because RubyGems requires one.}
