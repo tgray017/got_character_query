@@ -1,0 +1,32 @@
+PATH
+  remote: .
+  specs:
+    got_character_query (0.1.0)
+      colorize
+      nokogiri
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    coderay (1.1.2)
+    colorize (0.8.1)
+    method_source (0.9.2)
+    mini_portile2 (2.4.0)
+    nokogiri (1.10.0)
+      mini_portile2 (~> 2.4.0)
+    pry (0.12.2)
+      coderay (~> 1.1.0)
+      method_source (~> 0.9.0)
+    rake (10.4.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  bundler
+  got_character_query!
+  pry
+  rake (~> 10.0)
+
+BUNDLED WITH
+   2.0.1
