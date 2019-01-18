@@ -2,7 +2,7 @@ class GotCharacterQuery::CLI
   attr_accessor :input, :house_name, :kingdom_name, :char_name
   
   def call
-    Character.scrape_for_characters
+    Scraper.scrape_for_characters
     greeting
     menu
     goodbye
